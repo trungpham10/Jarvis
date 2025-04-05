@@ -194,9 +194,7 @@ export default function Home() {
                         
                       Here's some relevant context that might help with the response:
                       ${contextText}
-                      
-                      User prompt: ${userMessage.text}
-                      
+                                            
                       Use the context if relevant to the current question, but don't explicitly mention that you are using stored knowledge unless asked about it.` 
             },
             ...messages
@@ -204,7 +202,8 @@ export default function Home() {
               .map(msg => ({
                 role: msg.isUser ? 'user' : 'assistant',
                 content: msg.text
-              }))
+              })),
+            { role: 'user', isUser: true, content: userMessage.text }
           ],
           max_tokens: 1000
         })

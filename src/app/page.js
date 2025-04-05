@@ -190,13 +190,12 @@ export default function Home() {
           messages: [
             { 
               role: 'system', 
-              content: `You are Jarvis, a helpful AI assistant who helps user stick to their schedule and get things done. 
+              content: `You are Jarvis, a helpful AI assistant who helps user. 
                         
                       Here's some relevant context that might help with the response:
                       ${contextText}
                       
-                      Current query mode: ${queryMode.toUpperCase()}. 
-                      These results were retrieved from: ${contextSource}.
+                      User prompt: ${userMessage.text}
                       
                       Use the context if relevant to the current question, but don't explicitly mention that you are using stored knowledge unless asked about it.` 
             },
@@ -278,7 +277,7 @@ export default function Home() {
       // Create a specific prompt for getting the next best action
       const promptMessage = { 
         id: Date.now(), 
-        text: timeContext + "What should I do next based on my schedule?", 
+        text: "What should I do next?", 
         isUser: true,
         timestamp: new Date().toISOString(),
         isAction: true
@@ -329,9 +328,8 @@ export default function Home() {
                       [when to do it]: [specific action to take]
 
                       Example:
-                      6:00 PM - 6:30 PM: coding
-                      
-                      If there's not enough information about the user's schedule or tasks, suggest that they update you with their current priorities and schedule.` 
+                      [8am-10am]: study 
+                      ` 
             },
             ...messages
               .filter(msg => !msg.isSystem) // Filter out system messages
@@ -339,7 +337,7 @@ export default function Home() {
                 role: msg.isUser ? 'user' : 'assistant',
                 content: msg.text
               })),
-            { role: 'user', content: "What should I do next? Please recommend the highest priority action based on my schedule and priorities." }
+            { role: 'user', content: timeContext + "What should I do next based on my schedule?" }
           ],
           max_tokens: 1000
         })

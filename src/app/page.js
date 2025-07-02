@@ -97,6 +97,13 @@ export default function Home() {
     
     // Check for special commands
     const lowerInput = inputValue.toLowerCase().trim();
+    await fetch("https://mtaur.app.n8n.cloud/webhook-test/b7c8008c-36bd-41fe-874a-b418515150bb", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ message: inputValue }),
+    });
     
     // Handle mode switching commands
     if (lowerInput === "/knowledge") {
